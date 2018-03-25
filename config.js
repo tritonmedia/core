@@ -15,7 +15,7 @@ const yaml = require('js-yaml')
 const debug = require('debug')('media:helpers:config')
 
 module.exports = async service => {
-  const CONFIG_PATH   = path.join('/config', 'config.yaml')
+  const CONFIG_PATH   = process.env.CONFIG_PATH || path.join('/config', 'config.yaml')
   const config_exists = await fs.exists(CONFIG_PATH)
   const ENV           = process.env.NODE_ENV || 'debug'
 
