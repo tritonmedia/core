@@ -24,7 +24,7 @@ module.exports = {
       logger.info(`getObjects(): listing bucket '${bucketId}'`)
       let errored = false
       const objects = []
-      const stream = s3Client.listObjectsV2(bucketId, '', true)
+      const stream = s3Client.listObjects(bucketId, '', true)
       stream.on('data', obj => {
         console.log(obj)
         if (!obj.name) return // skip dir
@@ -44,6 +44,7 @@ module.exports = {
       })
       stream.on('error', err => {
         errored = true
+        console.log(err)
         return reject(err)
       })
     })
