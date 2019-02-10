@@ -9,8 +9,9 @@
 const logger = require('pino')({
   name: "triton-core/"+path.basename(__filename)
 })
+const path = require('path')
 
- module.exports = {
+module.exports = {
   /**
    * List all the objects in a bucket
    * @param {Minio.Client} s3Client s3client to use
@@ -44,6 +45,35 @@ const logger = require('pino')({
       stream.on('error', err => {
         errored = true
         return reject(err)
+      })
+    })
+  },
+
+  /**
+   * Cleanup recursively cleans all items in a bucket
+   * @param {Minio.Client} s3Client the s3client to use
+   * @param {String} bucketId - the bucket to clean
+   * @param {prefix} prefix - prefix to use
+   */
+  cleanupBucket: async (s3Client, bucketId, prefix = '') => {
+    logger.info('cleaning up bucket', bucketId)
+    return new Promise((resolve, reject) => {
+      const objectNames = []
+      const stream = s3Client.listObjects(bucketId, prefix, true)
+      stream.on('data', async obj => {
+        objectNames.push(obj.name)
+      })
+      stream.on('error', err => {
+        return reject(err)
+      })
+      stream.on('end', async () => {
+        try {
+          await s3Client.removeObjects(bucketId, objectNames)
+        } catch (err) {
+          return reject(err)
+        }
+
+        return resolve()
       })
     })
   }
