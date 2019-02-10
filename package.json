@@ -1,6 +1,6 @@
 {
   "name": "triton-core",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Triton Media Core Modules",
   "main": "index.js",
   "repository": "git@github.com:tritonmedia/core",
