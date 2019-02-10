@@ -17,6 +17,10 @@ module.exports = prop => {
       response = process.env.MEDIA || 'http://127.0.0.1:8001'
     break;
 
+    case 'minio':
+      response = process.env.MINIO || 'http://127.0.0.1:9000'
+    break;
+
     default:
       response = null;
     break;
