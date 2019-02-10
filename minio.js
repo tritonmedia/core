@@ -6,10 +6,10 @@
  * @version 1
  */
 
+const path = require('path')
 const logger = require('pino')({
   name: "triton-core/"+path.basename(__filename)
 })
-const path = require('path')
 
 module.exports = {
   /**
