@@ -12,6 +12,7 @@
     "jaeger-client": "^3.13.0",
     "js-yaml": "^3.11.0",
     "lodash": "^4.17.5",
+    "minio": "^7.0.5",
     "opentracing": "^0.14.3",
     "pino": "^5.11.1",
     "systeminformation": "^3.37.7"

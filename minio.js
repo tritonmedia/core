@@ -6,6 +6,7 @@
  * @version 1
  */
 
+const Minio = require('minio')
 const path = require('path')
 const url = require('url')
 const dyn = require('./dynamics')
@@ -22,6 +23,7 @@ module.exports = {
    */
   newClient: async config => {
     const minioEndpoint = url.parse(dyn('minio'))
+    logger.info(`minio client is using protocol='${minioEndpoint.protocol}',endpoint='${minioEndpoint.hostname}',port='${parseInt(minioEndpoint.port, 10)}',ssl='${minioEndpoint.protocol === 'https:'}'`)
     return new Minio.Client({
       endPoint: minioEndpoint.hostname,
       port: parseInt(minioEndpoint.port, 10),
