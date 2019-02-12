@@ -7,11 +7,30 @@
  */
 
 const path = require('path')
+const url = require('url')
+const dyn = require('./dynamics')
 const logger = require('pino')({
   name: "triton-core/"+path.basename(__filename)
 })
 
 module.exports = {
+  /**
+   * NewClient creates a new Minio client
+   * 
+   * @param {Object} config config object
+   * @returns {Minio.Client}
+   */
+  newClient: async config => {
+    const minioEndpoint = url.parse(dyn('minio'))
+    return new Minio.Client({
+      endPoint: minioEndpoint.hostname,
+      port: parseInt(minioEndpoint.port, 10),
+      useSSL: minioEndpoint.protocol === 'https:',
+      accessKey: config.keys.minio.accessKey,
+      secretKey: config.keys.minio.secretKey
+    })
+  },
+
   /**
    * List all the objects in a bucket
    * @param {Minio.Client} s3Client s3client to use
