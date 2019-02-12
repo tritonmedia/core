@@ -21,7 +21,7 @@ module.exports = {
    * @param {Object} config config object
    * @returns {Minio.Client}
    */
-  newClient: async config => {
+  newClient: config => {
     const minioEndpoint = url.parse(dyn('minio'))
     logger.info(`minio client is using protocol='${minioEndpoint.protocol}',endpoint='${minioEndpoint.hostname}',port='${parseInt(minioEndpoint.port, 10)}',ssl='${minioEndpoint.protocol === 'https:'}'`)
     return new Minio.Client({
