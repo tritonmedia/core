@@ -42,6 +42,8 @@ module.exports = {
    */
   getObjects: async (s3Client, bucketId, prefix = '') => {
     return new Promise((resolve, reject) => {
+      prefix = prefix.replace(/\/$/, '')
+
       logger.info(`getObjects(): listing bucket '${bucketId}'`)
       let errored = false
       const objects = []
