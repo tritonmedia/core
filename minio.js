@@ -33,6 +33,8 @@ module.exports = {
     })
   },
 
+  Minio: Minio,
+
   /**
    * List all the objects in a bucket
    * @param {Minio.Client} s3Client s3client to use
