@@ -21,6 +21,10 @@ module.exports = prop => {
       response = process.env.MINIO || 'http://127.0.0.1:9000'
     break;
 
+    case 'rabbitmq':
+      response = process.env.RABBITMQ || 'amqp://rabbitmq'
+    break;
+
     default:
       response = null;
     break;
