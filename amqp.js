@@ -19,13 +19,14 @@ const required = () => {
 }
 
 class AMQP {
-  constructor (host = required()) {
+  constructor (host = required(), prefetch = 1000) {
     this.host = host
     this.mode = null
 
     // queue creation options
     // TODO: make configurable
     this.numConsumerQueues = 2
+    this.prefetch = prefetch
 
     /**
      * @type {Map<string,Number>}
@@ -34,7 +35,12 @@ class AMQP {
 
     // connection and channels in use
     this.connection = null
-    this.channel = null
+
+    // publisher channel
+    this.pchannel = null
+
+    // generic channel for anything but publishing
+    this.channel = null 
   }
 
   async connect () {
@@ -111,7 +117,7 @@ class AMQP {
         await this._ensureConsumerQueues(channel, topic)
 
         // TODO: make configurable
-        channel.prefetch(1000)
+        channel.prefetch(this.prefetch)
 
         for (let i = 0; i !== this.numConsumerQueues; i++) {
           const queueName = `${topic}-${i}`
@@ -126,8 +132,7 @@ class AMQP {
                 }
               })
             } catch (err) {
-              console.log(err)
-              logger.error('processor failed', err)
+              logger.error('processor failed', err.message)
             }
           })
         }
@@ -145,9 +150,9 @@ class AMQP {
     if (this.mode && this.mode === 'consumer') throw new Error('Already marked as a consumer.')
 
     const generateChannel = async () => {
-      if (!this.channel) {
+      if (!this.pchannel) {
         logger.warn('generating channel')
-        this.channel = await this.connection.createChannel({
+        this.pchannel = await this.connection.createChannel({
           json: false,
           setup: async channel => {
             this._ensureConsumerQueues(channel, topic)
@@ -155,11 +160,11 @@ class AMQP {
           }
         })
 
-        await this.channel.waitForConnect()
+        await this.pchannel.waitForConnect()
         logger.info('channel is ready')
       }
 
-      return this.channel
+      return this.pchannel
     }
     const channel = await generateChannel()
 
