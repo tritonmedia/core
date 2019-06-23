@@ -22,7 +22,7 @@ module.exports = prop => {
     break;
 
     case 'rabbitmq':
-      response = process.env.RABBITMQ || 'amqp://rabbitmq'
+      response = process.env.RABBITMQ || 'amqp://user:bitnami@localhost'
     break;
 
     default:

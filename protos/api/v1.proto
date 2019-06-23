@@ -1,0 +1,7 @@
+package api;
+
+syntax = "proto3";
+
+import "v1.convert.proto";
+import "v1.download.proto";
+import "v1.telemetry.proto";
