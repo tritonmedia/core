@@ -13,6 +13,7 @@ message Media {
   enum CreatorType {
     TRELLO = 0;
     TWILIO = 1;
+    DISCORD = 2;
   }
   required CreatorType creator = 3;
   // ID that correlates to creator, if needed
@@ -35,6 +36,13 @@ message Media {
   required SourceType source = 6;
   required string sourceURI = 7;
 
-  // MAL is a MyAnimeList link for future use
-  required string MAL = 8;
+  // MetadataType is the metadata provider used for deduplication and
+  // identification
+  enum MetadataType {
+    MAL = 0;
+    IMDB = 1;
+  }
+  required MetadataType metadata = 8;
+  // metadataId is the id used to tie this to a metadata provider
+  required string metadataId = 9;
 }

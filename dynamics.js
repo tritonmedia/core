@@ -1,5 +1,8 @@
 /**
  * Dynamic Environment Variables
+ * 
+ * @todo This is meant to be replaced by service discovery or something
+ * in the future.
  *
  * @author Jared Allard <jaredallard@outlook.com>
  * @license MIT
@@ -23,6 +26,10 @@ module.exports = prop => {
 
     case 'rabbitmq':
       response = process.env.RABBITMQ || 'amqp://user:bitnami@localhost'
+    break;
+
+    case 'postgres':
+      response = process.env.POSTGRES || 'localhost'
     break;
 
     default:
