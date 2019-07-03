@@ -45,4 +45,14 @@ message Media {
   required MetadataType metadata = 8;
   // metadataId is the id used to tie this to a metadata provider
   required string metadataId = 9;
+
+  // Status is the status of the media in the pipeline
+  enum Status {
+    QUEUED = 0;
+    DOWNLOADING = 1;
+    CONVERTING = 2;
+    UPLOADING = 3;
+    DEPLOYED = 4;
+  }
+  required Status status = 10;
 }

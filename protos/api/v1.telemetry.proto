@@ -12,3 +12,21 @@ message TelemetryError {
   // error message
   required string message = 2;
 }
+
+message TelemetryStatus {
+  // id is the ID for this status update
+  required string id = 0;
+
+  // mediaId is the id of the media this status pertains too
+  required string mediaId = 1;
+
+  // Status is the status of this media
+  enum Status {
+    QUEUED = 0;
+    DOWNLOADING = 1;
+    CONVERTING = 2;
+    UPLOADING = 3;
+    DEPLOYED = 4;
+  }
+  required Status status = 2;
+}
