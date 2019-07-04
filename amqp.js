@@ -19,13 +19,13 @@ const required = () => {
 }
 
 class AMQP {
-  constructor (host = required(), prefetch = 1000) {
+  constructor (host = required(), prefetch = 1000, numConsumerQueues = 2) {
     this.host = host
     this.mode = null
 
     // queue creation options
     // TODO: make configurable
-    this.numConsumerQueues = 2
+    this.numConsumerQueues = numConsumerQueues
     this.prefetch = prefetch
 
     /**
