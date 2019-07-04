@@ -40,13 +40,19 @@ module.exports = class Telemetry {
       status,
     }
 
+    let encoded;
     try {
-      const encoded = proto.encode(this.telemetryStatusProto, payload)
+      encoded = proto.encode(this.telemetryStatusProto, payload)
     } catch (err) {
-      throw new Error('Failed to serialize telemetry status update:', err.message || err)
+      logger.warn('Failed to serialize telemetry status update:', err.message || err)
     }
 
-    await this.publisher.publish('v1.telemetry.status', encoded)
+    try {
+      await this.publisher.publish('v1.telemetry.status', encoded)
+    } catch (err) {
+      logger.warn('failed to publish telemetry status:', err.message || err)
+    }
+
     return payload
   }
 }
