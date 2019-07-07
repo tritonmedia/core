@@ -26,8 +26,10 @@ CREATE TABLE media (
   source_uri text NOT NULL,
   metadata_id text NOT NULL,
   metadata smallint NOT NULL DEFAULT '0'::smallint,
-  status smallint DEFAULT '0'::smallint
+  status smallint DEFAULT '0'::smallint,
+  converter_status integer DEFAULT 0
 );
+COMMENT ON TABLE media IS 'This table holds media information';
 COMMENT ON COLUMN media.id IS 'ID of the media';
 COMMENT ON COLUMN media.media_name IS 'Media name';
 COMMENT ON COLUMN media.creator IS 'Creator Type, see protobuf for int to string';
@@ -38,6 +40,7 @@ COMMENT ON COLUMN media.source_uri IS 'Source URL';
 COMMENT ON COLUMN media.metadata_id IS 'Metadata ID';
 COMMENT ON COLUMN media.metadata IS 'Metadata Type: 0 MAL, 1 IMDB';
 COMMENT ON COLUMN media.status IS 'Status of the media file';
+COMMENT ON COLUMN media.converter_status IS 'Converter Status is used by the converter to determine it''s position. This could be used for progress calculation.';
 `
 
 /**
@@ -174,6 +177,37 @@ class Storage {
     }
 
     return proto.encode(this.downloadProto, payload)
+  }
+
+  /**
+   * Update converter Status
+   * @param {String} mediaId id of the media to update
+   * @param {Number} i new int value
+   */
+  async setConverterStatus (mediaId, i) {
+    return this.adapter.query(
+      'UPDATE "public"."media" SET "converter_status"=$1 WHERE "id"=$2',
+      [
+        i,
+        mediaId
+      ]
+    )
+  }
+
+  /**
+   * Get converter status
+   * @param {String} mediaId id of the media
+   * @returns {Number} position to start at
+   */
+  async getConverterStatus (mediaId) {
+    const res = await this.adapter.query('SELECT converter_status FROM media where id = $1', [mediaId])
+    if (res.rows.length === 0){
+      const err = new Error('ID not found')
+      err.code = 'ERRNOTFOUND'
+      throw err
+    }
+
+    return res.rows[0].converter_status
   }
 
   /**

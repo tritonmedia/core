@@ -55,15 +55,15 @@ module.exports = {
         if (!obj.name) return // skip dir
         const p = path.parse(obj.name)
         if (p.dir !== prefix) {
-          logger.info(`skipping '${obj.name}' due to incorrect dir (${p.dir} != ${prefix})`)
+          logger.debug(`skipping '${obj.name}' due to incorrect dir (${p.dir} != ${prefix})`)
           return
         }
 
-        logger.info(`getObjects(): push '${obj.name}'`)
+        logger.debug(`getObjects(): push '${obj.name}'`)
         objects.push(obj)
       })
       stream.on('end', () => {
-        logger.info('getObjects(): end')
+        logger.debug('getObjects(): end')
         if (errored) return
         return resolve(objects)
       })

@@ -129,7 +129,10 @@ class AMQP {
                 message: msg,
                 ack: () => {
                   channel.ack(msg)
-                }
+                },
+                nack: () => {
+                  channel.nack(msg)
+                },
               })
             } catch (err) {
               logger.error('processor failed', err.message)
@@ -196,8 +199,14 @@ class AMQP {
     this._topicState.set(topic, rkIndex)
   }
 
+  async cancel () {
+    if (this.mode !== 'consumer') return
+    this.connection._channel.cancel()
+  }
+
   async close () {
     this.connection.close()
+    if (this.pchannel) this.pchannel.close()
   }
 }
 
