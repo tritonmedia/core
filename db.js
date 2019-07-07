@@ -205,6 +205,30 @@ class Storage {
   }
 
   /**
+   * List media
+   * @todo paginate
+   * @returns {Array} media
+   */
+  async list () {
+    const res = await this.adapter.query('SELECT * FROM media')
+    if (res.rows.length === 0) return []
+
+    return res.rows.map(row => {
+      return {
+        id: row.id,
+        name: row.media_name,
+        creator: row.creator,
+        creatorId: row.creator_id,
+        type: row.type,
+        source: row.source,
+        sourceURI: row.source_uri,
+        metadata: row.metadata,
+        metadataId: row.metadata_id,
+        status: row.status
+      }
+    })
+  }
+  /**
    * Update the status of a media
    *
    * @param {String} id id of the media
