@@ -2,6 +2,8 @@ package api;
 
 syntax = "proto3";
 
+import "v1.telemetry.proto";
+
 // v1.media represents v1 of the media card
 message Media {
   // id of this media
@@ -47,12 +49,5 @@ message Media {
   required string metadataId = 9;
 
   // Status is the status of the media in the pipeline
-  enum Status {
-    QUEUED = 0;
-    DOWNLOADING = 1;
-    CONVERTING = 2;
-    UPLOADING = 3;
-    DEPLOYED = 4;
-  }
-  required Status status = 10;
+  required TelemetryStatusEntry status = 10;
 }

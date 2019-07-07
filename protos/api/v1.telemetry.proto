@@ -2,6 +2,16 @@ package api;
 
 syntax = "proto3";
 
+// Status is the status of this media
+enum TelemetryStatusEntry {
+  QUEUED = 0;
+  DOWNLOADING = 1;
+  CONVERTING = 2;
+  UPLOADING = 3;
+  DEPLOYED = 4;
+  ERRORED = 5;
+}
+
 message TelemetryError {
   // id for this error
   required string id = 0;
@@ -20,13 +30,19 @@ message TelemetryStatus {
   // mediaId is the id of the media this status pertains too
   required string mediaId = 1;
 
-  // Status is the status of this media
-  enum Status {
-    QUEUED = 0;
-    DOWNLOADING = 1;
-    CONVERTING = 2;
-    UPLOADING = 3;
-    DEPLOYED = 4;
-  }
-  required Status status = 2;
+  required TelemetryStatusEntry status = 2;
+}
+
+message TelemetryProgress {
+  // id for this telemetry update
+  required string id = 0;
+
+  // media id thjis perstains too
+  required string mediaId = 1;
+
+  // progress in 0-100
+  required int32 progress = 2;
+
+  // status
+  required TelemetryStatusEntry status = 3;
 }
