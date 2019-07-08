@@ -51,7 +51,6 @@ module.exports = {
       const objects = []
       const stream = s3Client.listObjects(bucketId, '', true)
       stream.on('data', obj => {
-        console.log(obj)
         if (!obj.name) return // skip dir
         const p = path.parse(obj.name)
         if (p.dir !== prefix) {
@@ -69,7 +68,7 @@ module.exports = {
       })
       stream.on('error', err => {
         errored = true
-        console.log(err)
+        logger.error('getObjects(): error:', err.message || err)
         return reject(err)
       })
     })
@@ -90,6 +89,7 @@ module.exports = {
         objectNames.push(obj.name)
       })
       stream.on('error', err => {
+        logger.error('cleanupBucket(): error:', err.message || err)
         return reject(err)
       })
       stream.on('end', async () => {

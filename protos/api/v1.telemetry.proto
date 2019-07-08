@@ -31,6 +31,9 @@ message TelemetryStatus {
   required string mediaId = 1;
 
   required TelemetryStatusEntry status = 2;
+
+  // Host this was started on
+  required string Host = 3;
 }
 
 message TelemetryProgress {
@@ -45,4 +48,7 @@ message TelemetryProgress {
 
   // status
   required TelemetryStatusEntry status = 3;
+
+  // Host this was processed on
+  required string Host = 4;
 }

@@ -12,6 +12,7 @@ const AMQP = require('./amqp')
 const proto = require('./proto')
 const uuid = require('uuid/v4')
 const path = require('path')
+const os = require('os')
 const logger = require('pino')({
   name: path.basename(__filename)
 })
@@ -46,6 +47,7 @@ module.exports = class Telemetry {
       id: uuid(),
       mediaId,
       status,
+      host: os.hostname() || 'unknown'
     }
 
     let encoded;
@@ -76,7 +78,8 @@ module.exports = class Telemetry {
       id: uuid(),
       mediaId,
       status,
-      progress
+      progress,
+      host: os.hostname() || 'unknown',
     }
 
     let encoded;
