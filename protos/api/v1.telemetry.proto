@@ -33,7 +33,7 @@ message TelemetryStatus {
   required TelemetryStatusEntry status = 2;
 
   // Host this was started on
-  required string Host = 3;
+  required string host = 3;
 }
 
 message TelemetryProgress {
@@ -50,5 +50,5 @@ message TelemetryProgress {
   required TelemetryStatusEntry status = 3;
 
   // Host this was processed on
-  required string Host = 4;
+  required string host = 4;
 }
