@@ -10,6 +10,7 @@ const { Pool } = require('pg')
 const proto = require('./proto')
 const dyn = require('./dynamics')
 const uuid = require('uuid/v4')
+const _ = require('lodash')
 const path = require('path')
 const logger = require('pino')({
   name: path.basename(__filename)
@@ -29,6 +30,12 @@ CREATE TABLE media (
   status smallint DEFAULT '0'::smallint,
   converter_status integer DEFAULT 0
 );
+CREATE TABLE tokens (
+  token character varying(128) PRIMARY KEY,
+  created_at timestamp with time zone DEFAULT now()
+);
+COMMENT ON COLUMN tokens.token IS 'API Token';
+COMMENT ON COLUMN tokens.created_at IS 'When this token was created';
 COMMENT ON TABLE media IS 'This table holds media information';
 COMMENT ON COLUMN media.id IS 'ID of the media';
 COMMENT ON COLUMN media.media_name IS 'Media name';
@@ -208,6 +215,43 @@ class Storage {
     }
 
     return res.rows[0].converter_status
+  }
+
+  /**
+   * Insert a token
+   *
+   * @param {String} token token to insert
+   */
+  async insertToken (token) {
+    return this.adapter.query(
+      'INSERT INTO tokens("token") VALUES ($1)', [token]
+    )
+  }
+
+  /**
+   * Check if a token exists
+   *
+   * @param {String} token token value
+   */
+  async tokenExists (token) {
+    const res = await this.adapter.query('SELECT token FROM tokens WHERE token = $1', [token])
+    if (res.rows.length === 1) {
+      return true
+    }
+
+    return false
+  }
+
+  /**
+   * List all Tokens
+   *
+   * @returns {String[]} tokens
+   */
+  async listTokens () {
+    const res = await this.adapter.query('SELECT token FROM tokens')
+    return _.map(res.rows, item => {
+      return item.id
+    })
   }
 
   /**
