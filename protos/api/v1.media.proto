@@ -34,6 +34,7 @@ message Media {
     HTTP = 0;
     TORRENT = 1;
     FILE = 2;
+    BUCKET = 3;
   }
   required SourceType source = 6;
   required string sourceURI = 7;

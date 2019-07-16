@@ -77,6 +77,7 @@ class Storage {
       try {
         await this.adapter.query(initStatement)
       } catch (err) {
+        console.log(err)
         logger.error('failed to init postgress', err.message)
         // TODO: logging stuff for here
         throw err
