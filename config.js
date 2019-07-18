@@ -12,7 +12,9 @@ const _    = require('lodash')
 const fs   = require('fs-extra')
 const path = require('path')
 const yaml = require('js-yaml')
-const debug = require('debug')('media:helpers:config')
+const logger = require('pino')({
+  name: path.basename(__filename)
+})
 
 module.exports = async service => {
   const CONFIG_PATH   = process.env.CONFIG_PATH || path.join('/config', 'config.yaml')
@@ -25,7 +27,7 @@ module.exports = async service => {
   const configContents = await fs.readFile(CONFIG_PATH)
   const configObject   = yaml.safeLoad(configContents)
 
-  debug('environment', ENV)
+  logger.info('environment', ENV)
   const config         = configObject[ENV]
   if(!config) throw new Error(`Config enviroment '${ENV}' not found.`)
 

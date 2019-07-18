@@ -109,7 +109,7 @@ class AMQP {
   async listen (topic = required(), processor = required()) {
     if (this.mode && this.mode === 'publisher') throw new Error('Already marked as a publisher.')
 
-    this.connection.createChannel({
+    const channelWrapper = this.connection.createChannel({
       json: false,
       setup: async channel => {
         logger.info('executing channel setup')
@@ -117,7 +117,7 @@ class AMQP {
         await this._ensureConsumerQueues(channel, topic)
 
         // TODO: make configurable
-        channel.prefetch(this.prefetch)
+        channel.prefetch(this.prefetch, true)
 
         for (let i = 0; i !== this.numConsumerQueues; i++) {
           const queueName = `${topic}-${i}`
@@ -128,10 +128,10 @@ class AMQP {
               processor({
                 message: msg,
                 ack: () => {
-                  channel.ack(msg)
+                  channelWrapper.ack(msg)
                 },
                 nack: () => {
-                  channel.nack(msg)
+                  channelWrapper.nack(msg)
                 },
               })
             } catch (err) {
@@ -184,7 +184,9 @@ class AMQP {
     logger.info('publishing to exchange', topic, 'using rk', rk)
 
     try {
-      await channel.publish(topic, rk, body)
+      await channel.publish(topic, rk, body, {
+        persistent: true
+      })
     } catch (err) {
       logger.error('failed to publish', err)
     }
