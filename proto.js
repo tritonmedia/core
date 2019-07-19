@@ -43,14 +43,58 @@ module.exports = {
    * 
    * @param {protobuf.Type} type protobuf type
    * @param {Buffer} buf buf to decode
+   * @param {protobuf.IConversionOptions} opts conversion options
    * @returns {Object} type object
    */
-  decode: (type, buf) => {
+  decode: (type, buf, opts) => {
     const encMsg = type.decode(buf)
-    return type.toObject(encMsg, {
+    return type.toObject(encMsg, opts || {
       enums: Number,
       bytes: String,
       longs: String,
     })
+  },
+
+  /**
+   * Convert a string to the equiv enum
+   * @param {protobuf.Type} type protobuf type
+   * @param {String} key key of the protobuf
+   * @param {String} value value of it
+   * @returns {Number} numeric representation of the enum
+   */
+  stringToEnum: (type, key, value) => {
+    const e = type.lookupEnum(key)
+    const v = e.values[value]
+    if (v === undefined) {
+      throw new Error(`Key '${key}' not found.`)
+    }
+    return v
+  },
+
+  /**
+   * Convert a number to the equiv enum string
+   * @param {protobuf.Type} type protobuf type
+   * @param {String} key key of the protobuf
+   * @param {Number} value value of it
+   * @returns {String} string representation of the enum
+   */
+  enumToString: (type, key, value) => {
+    const e = type.lookupEnum(key)
+    const v = e.valuesById[value]
+    if (v === undefined) {
+      throw new Error(`Key '${key}' not found.`)
+    }
+    return v
+  },
+
+  /**
+   * Return the possible string values of an enum
+   * @param {protobuf.Type} type protobuf type
+   * @param {String} key key of the protobuf
+   * @returns {String[]}
+   */
+  enumValues: (type, key) => {
+    const e = type.lookupEnum(key)
+    return Object.keys(e.values)
   }
 }

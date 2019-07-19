@@ -16,6 +16,7 @@ message Media {
     TRELLO = 0;
     TWILIO = 1;
     DISCORD = 2;
+    API = 3;
   }
   required CreatorType creator = 3;
   // ID that correlates to creator, if needed
@@ -44,6 +45,9 @@ message Media {
   enum MetadataType {
     MAL = 0;
     IMDB = 1;
+    ANILIST = 2;
+    KITSU = 3;
+    ANIDB = 4;
   }
   required MetadataType metadata = 8;
   // metadataId is the id used to tie this to a metadata provider
