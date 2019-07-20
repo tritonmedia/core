@@ -1,15 +1,15 @@
-package api;
-
 syntax = "proto3";
+
+package api;
 
 import "v1.telemetry.proto";
 
 // v1.media represents v1 of the media card
 message Media {
   // id of this media
-  required string id = 1;
+  string id = 1;
   // name of the media
-  required string name = 2;
+  string name = 2;
 
   // CreatorType is where this media came from (where it was requested)
   enum CreatorType {
@@ -18,9 +18,9 @@ message Media {
     DISCORD = 2;
     API = 3;
   }
-  required CreatorType creator = 3;
+  CreatorType creator = 3;
   // ID that correlates to creator, if needed
-  optional string creatorId = 4;
+  string creatorId = 4;
   
   // type of the media
   enum MediaType {
@@ -28,7 +28,7 @@ message Media {
     TV = 1;
     MUSIC = 2;
   }
-  required MediaType type = 5;
+  MediaType type = 5;
 
   // SourceType is where this media came from
   enum SourceType {
@@ -37,8 +37,8 @@ message Media {
     FILE = 2;
     BUCKET = 3;
   }
-  required SourceType source = 6;
-  required string sourceURI = 7;
+  SourceType source = 6;
+  string sourceURI = 7;
 
   // MetadataType is the metadata provider used for deduplication and
   // identification
@@ -49,10 +49,10 @@ message Media {
     KITSU = 3;
     ANIDB = 4;
   }
-  required MetadataType metadata = 8;
+  MetadataType metadata = 8;
   // metadataId is the id used to tie this to a metadata provider
-  required string metadataId = 9;
+  string metadataId = 9;
 
   // Status is the status of the media in the pipeline
-  required TelemetryStatusEntry status = 10;
+  TelemetryStatusEntry status = 10;
 }

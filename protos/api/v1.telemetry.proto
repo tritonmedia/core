@@ -1,6 +1,6 @@
-package api;
-
 syntax = "proto3";
+
+package api;
 
 // Status is the status of this media
 enum TelemetryStatusEntry {
@@ -14,41 +14,41 @@ enum TelemetryStatusEntry {
 
 message TelemetryError {
   // id for this error
-  required string id = 0;
+  string id = 1;
 
   // mediaId this error correlates too
-  optional string mediaId = 1;
+  string mediaId = 2;
 
   // error message
-  required string message = 2;
+  string message = 3;
 }
 
 message TelemetryStatus {
   // id is the ID for this status update
-  required string id = 0;
+  string id = 1;
 
   // mediaId is the id of the media this status pertains too
-  required string mediaId = 1;
+  string mediaId = 2;
 
-  required TelemetryStatusEntry status = 2;
+  TelemetryStatusEntry status = 3;
 
   // Host this was started on
-  required string host = 3;
+  string host = 4;
 }
 
 message TelemetryProgress {
   // id for this telemetry update
-  required string id = 0;
+  string id = 1;
 
   // media id thjis perstains too
-  required string mediaId = 1;
+  string mediaId = 2;
 
   // progress in 0-100
-  required int32 progress = 2;
+  int32 progress = 3;
 
   // status
-  required TelemetryStatusEntry status = 3;
+  TelemetryStatusEntry status = 4;
 
   // Host this was processed on
-  required string host = 4;
+  string host = 5;
 }
