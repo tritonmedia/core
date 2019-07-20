@@ -4,6 +4,8 @@ package api;
 
 import "v1.telemetry.proto";
 
+// TODO(jaredallard): reevaluated this whole enum idea
+
 // v1.media represents v1 of the media card
 message Media {
   // id of this media
@@ -15,7 +17,7 @@ message Media {
   enum CreatorType {
     // 0 isn't sent over the write in a lot of proto implementations, but is required to be
     // set in an enum, so we just throw this away here
-    EMPTY = 0;
+    EMPTY_1 = 0;
     TRELLO = 1;
     TWILIO = 2;
     DISCORD = 3;
@@ -29,7 +31,7 @@ message Media {
   enum MediaType {
     // 0 isn't sent over the write in a lot of proto implementations, but is required to be
     // set in an enum, so we just throw this away here
-    EMPTY = 0;
+    EMPTY_2 = 0;
     MOVIE = 1;
     TV = 2;
     MUSIC = 3;
@@ -40,7 +42,7 @@ message Media {
   enum SourceType {
     // 0 isn't sent over the write in a lot of proto implementations, but is required to be
     // set in an enum, so we just throw this away here
-    EMPTY = 0;
+    EMPTY_3= 0;
     HTTP = 1;
     TORRENT = 2;
     FILE = 3;
@@ -54,7 +56,7 @@ message Media {
   enum MetadataType {
     // 0 isn't sent over the write in a lot of proto implementations, but is required to be
     // set in an enum, so we just throw this away here
-    EMPTY = 0;
+    EMPTY_4 = 0;
     MAL = 1;
     IMDB = 2;
     ANILIST = 3;
