@@ -13,10 +13,10 @@ message Media {
 
   // CreatorType is where this media came from (where it was requested)
   enum CreatorType {
-    TRELLO = 0;
-    TWILIO = 1;
-    DISCORD = 2;
-    API = 3;
+    TRELLO = 1;
+    TWILIO = 2;
+    DISCORD = 3;
+    API = 4;
   }
   CreatorType creator = 3;
   // ID that correlates to creator, if needed
@@ -24,18 +24,18 @@ message Media {
   
   // type of the media
   enum MediaType {
-    MOVIE = 0;
-    TV = 1;
-    MUSIC = 2;
+    MOVIE = 1;
+    TV = 2;
+    MUSIC = 3;
   }
   MediaType type = 5;
 
   // SourceType is where this media came from
   enum SourceType {
-    HTTP = 0;
-    TORRENT = 1;
-    FILE = 2;
-    BUCKET = 3;
+    HTTP = 1;
+    TORRENT = 2;
+    FILE = 3;
+    BUCKET = 4;
   }
   SourceType source = 6;
   string sourceURI = 7;
@@ -43,11 +43,11 @@ message Media {
   // MetadataType is the metadata provider used for deduplication and
   // identification
   enum MetadataType {
-    MAL = 0;
-    IMDB = 1;
-    ANILIST = 2;
-    KITSU = 3;
-    ANIDB = 4;
+    MAL = 1;
+    IMDB = 2;
+    ANILIST = 3;
+    KITSU = 4;
+    ANIDB = 5;
   }
   MetadataType metadata = 8;
   // metadataId is the id used to tie this to a metadata provider
