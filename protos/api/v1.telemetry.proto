@@ -4,6 +4,9 @@ package api;
 
 // Status is the status of this media
 enum TelemetryStatusEntry {
+  // 0 isn't sent over the write in a lot of proto implementations, but is required to be
+  // set in an enum, so we just throw this away here
+  EMPTY = 0;
   QUEUED = 1;
   DOWNLOADING = 2;
   CONVERTING = 3;
