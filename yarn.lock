@@ -101,6 +101,11 @@ async@^1.5.2:
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
   integrity sha1-7GphrlZIDAw8skHJVhjiCJL5Zyo=
 
+bintrees@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/bintrees/-/bintrees-1.0.1.tgz#0e655c9b9c2435eaab68bf4027226d2b55a34524"
+  integrity sha1-DmVcm5wkNeqraL9AJyJtK1WjRSQ=
+
 bitsyntax@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/bitsyntax/-/bitsyntax-0.1.0.tgz#b0c59acef03505de5a2ed62a2f763c56ae1d6205"
@@ -453,6 +458,13 @@ process-nextick-args@~2.0.0:
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
 
+prom-client@^11.5.3:
+  version "11.5.3"
+  resolved "https://registry.yarnpkg.com/prom-client/-/prom-client-11.5.3.tgz#5fedfce1083bac6c2b223738e966d0e1643756f8"
+  integrity sha512-iz22FmTbtkyL2vt0MdDFY+kWof+S9UB/NACxSn2aJcewtw+EERsen0urSkZ2WrHseNdydsvcxCTAnPcSMZZv4Q==
+  dependencies:
+    tdigest "^0.1.1"
+
 promise-breaker@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/promise-breaker/-/promise-breaker-5.0.0.tgz#58e8541f1619554057da95a211794d7834d30c1d"
@@ -580,6 +592,13 @@ string_decoder@~1.1.1:
   integrity sha512-n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg==
   dependencies:
     safe-buffer "~5.1.0"
+
+tdigest@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/tdigest/-/tdigest-0.1.1.tgz#2e3cb2c39ea449e55d1e6cd91117accca4588021"
+  integrity sha1-Ljyyw56kSeVdHmzZEReszKRYgCE=
+  dependencies:
+    bintrees "1.0.1"
 
 thriftrw@^3.5.0:
   version "3.11.3"

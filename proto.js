@@ -58,15 +58,15 @@ module.exports = {
   /**
    * Convert a string to the equiv enum
    * @param {protobuf.Type} type protobuf type
-   * @param {String} key key of the protobuf
-   * @param {String} value value of it
+   * @param {String} en enum to look at
+   * @param {String} str string name
    * @returns {Number} numeric representation of the enum
    */
-  stringToEnum: (type, key, value) => {
-    const e = type.lookupEnum(key)
-    const v = e.values[value]
+  stringToEnum: (type, en, str) => {
+    const e = type.lookupEnum(en)
+    const v = e.values[str]
     if (v === undefined) {
-      throw new Error(`Key '${key}' not found.`)
+      throw new Error(`Failed to find string '${str}'`)
     }
     return v
   },
