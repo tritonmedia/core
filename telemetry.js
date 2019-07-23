@@ -22,9 +22,9 @@ const required = () => {
 }
 
 module.exports = class Telemetry {
-  constructor (amqpHost) {
-    this.statusPublisher = new AMQP(amqpHost)
-    this.progressPublisher = new AMQP(amqpHost)
+  constructor (amqpHost, prom) {
+    this.statusPublisher = new AMQP(amqpHost, 1, 2, prom)
+    this.progressPublisher = new AMQP(amqpHost, 1, 2, prom)
   }
 
   async connect () {
