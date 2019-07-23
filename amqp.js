@@ -21,13 +21,40 @@ const required = () => {
   throw new Error('Missing required parameter to AMQP.')
 }
 
+const metrics = {
+  up: new client.Gauge({
+    name: 'rabbitmq_up',
+    help: '1 if RabbitMQ connection is up, 0 if down'
+  }),
+  messages_published: new client.Counter({
+    name: 'rabbitmq_messages_published',
+    help: 'Total number of rabbitmq messages published in this processes lifetime',
+    labelNames: ['queue', 'exchange']
+  }),
+  messages_published_errored: new client.Counter({
+    name: 'rabbitmq_messages_published_errored',
+    help: 'Total number of rabbitmq messages that failed to be published in this processes lifetime',
+    labelNames: ['queue', 'exchange']
+  }),
+  messages_unacked_ram: new client.Gauge({
+    name: 'rabbitmq_messages_unacked_ram',
+    help: 'Current number of unacked messages',
+    labelNames: ['queue', 'exchange']
+  }),
+  messages_consumed: new client.Counter({
+    name: 'rabbitmq_messages_consumed',
+    help: 'Total number of rabbitmq messages consumed in this processes lifetime',
+    labelNames: ['queue', 'exchange']
+  })
+}
+
 class AMQP {
   /**
    * 
    * @param {String} host host to connect too
    * @param {Number} [prefetch=1000] global prefetch
    * @param {Number} [numConsumerQueues=2] number of consumer queues to listen / publish on
-   * @param {client} prom prometheus client
+   * @param {client} prom DEPRECATED: prometheus client
    */
   constructor (host = required(), prefetch = 1000, numConsumerQueues = 2, prom) {
     this.host = host
@@ -55,45 +82,17 @@ class AMQP {
 
     this.prom = prom
     if (!this.prom) throw new Error('Missing prometheus client')
-
-    // prometheus stuff
-    this.metrics = {
-      up: new this.prom.Gauge({
-        name: 'rabbitmq_up',
-        help: '1 if RabbitMQ connection is up, 0 if down'
-      }),
-      messages_published: new this.prom.Counter({
-        name: 'rabbitmq_messages_published',
-        help: 'Total number of rabbitmq messages published in this processes lifetime',
-        labelNames: ['queue', 'exchange']
-      }),
-      messages_published_errored: new this.prom.Counter({
-        name: 'rabbitmq_messages_published_errored',
-        help: 'Total number of rabbitmq messages that failed to be published in this processes lifetime',
-        labelNames: ['queue', 'exchange']
-      }),
-      messages_unacked_ram: new this.prom.Gauge({
-        name: 'rabbitmq_messages_unacked_ram',
-        help: 'Current number of unacked messages',
-        labelNames: ['queue', 'exchange']
-      }),
-      messages_consumed: new this.prom.Counter({
-        name: 'rabbitmq_messages_consumed',
-        help: 'Total number of rabbitmq messages consumed in this processes lifetime',
-        labelNames: ['queue', 'exchange']
-      })
-    }
   }
 
   async connect () {
     return new Promise(async (resolve, reject) => {
       this.connection = await amqp.connect(this.host)
       this.connection.on('disconnect', err => {
-        this.metrics.up.set(0)
+        metrics.up.set(0)
         logger.warn('disconnected to rabbitmq', err)
       })
       this.connection.on('connect', () => {
-        this.metrics.up.set(1)
+        metrics.up.set(1)
         logger.info('connected to rabbitmq')
         resolve()
       })
@@ -174,16 +173,16 @@ class AMQP {
             }
 
             try {
-              this.metrics.messages_consumed.inc(labels)
-              this.metrics.messages_unacked_ram.inc(labels)
+              metrics.messages_consumed.inc(labels)
+              metrics.messages_unacked_ram.inc(labels)
               processor({
                 message: msg,
                 ack: () => {
-                  this.metrics.messages_unacked_ram.dec(labels)
+                  metrics.messages_unacked_ram.dec(labels)
                   channelWrapper.ack(msg)
                 },
                 nack: () => {
-                  this.metrics.messages_unacked_ram.dec(labels)
+                  metrics.messages_unacked_ram.dec(labels)
                   channelWrapper.nack(msg)
                 },
               })
@@ -248,10 +247,10 @@ class AMQP {
       })
     } catch (err) {
       logger.error('failed to publish', err)
-      this.metrics.messages_published_errored.inc(labels)
+      metrics.messages_published_errored.inc(labels)
     }
 
-    this.metrics.messages_published.inc(labels)
+    metrics.messages_published.inc(labels)
 
     // reset if we're at the max num of consumer queues
     if (rkIndex === this.numConsumerQueues - 1) {
