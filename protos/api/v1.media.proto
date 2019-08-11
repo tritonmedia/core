@@ -62,6 +62,7 @@ message Media {
     ANILIST = 3;
     KITSU = 4;
     ANIDB = 5;
+    TVDB = 6;
   }
   MetadataType metadata = 8;
   // metadataId is the id used to tie this to a metadata provider
