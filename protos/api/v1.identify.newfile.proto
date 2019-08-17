@@ -20,4 +20,7 @@ message IdentifyNewFile {
 
   // episode of this media,
   int64 episode = 5;
+
+  // season of this media
+  int64 season = 6;
 }
