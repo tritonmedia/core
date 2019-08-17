@@ -7,3 +7,5 @@ option go_package = "api";
 import "v1.convert.proto";
 import "v1.download.proto";
 import "v1.telemetry.proto";
+import "v1.identify.proto";
+import "v1.identify.newfile.proto";
