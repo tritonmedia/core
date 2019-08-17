@@ -5,12 +5,12 @@ package api;
 // media definitions
 import "v1.media.proto";
 
-message ConvertMedia {
+message ConvertV2Media {
   // key is the object to download out of S3 for this operation
   string key = 1;
 }
 
-message Convert {
+message ConvertV2 {
   // when this job was created
   string createdAt = 1;
 
@@ -21,5 +21,5 @@ message Convert {
   Media parent = 3;
 
   // media is the convertmedia operation details
-  ConvertMedia media = 4;
+  ConvertV2Media media = 4;
 }
