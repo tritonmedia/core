@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package api;
+
+// media definitions
+import "v1.media.proto";
+
+message ConvertMedia {
+  // key is the object to download out of S3 for this operation
+  string key = 1;
+}
+
+message Convert {
+  // when this job was created
+  string createdAt = 1;
+
+  // id of this convert operation
+  string id = 2;
+
+  // parent is the media object that this convert operation is related too
+  Media parent = 3;
+
+  // media is the convertmedia operation details
+  ConvertMedia media = 4;
+}

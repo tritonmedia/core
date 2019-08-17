@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package api;
+
+// media definitions
+import "v1.media.proto";
+
+message IdentifyNewFile {
+  // when this was created
+  string createdAt = 1;
+
+  // media object
+  Media media = 2;
+
+  // key of the file
+  string key = 3;
+
+  // quality of the file
+  string quality = 4;
+}
