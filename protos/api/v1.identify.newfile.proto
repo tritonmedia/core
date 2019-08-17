@@ -17,4 +17,7 @@ message IdentifyNewFile {
 
   // quality of the file
   string quality = 4;
+
+  // episode of this media,
+  int64 episode = 5;
 }
