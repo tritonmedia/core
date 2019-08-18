@@ -82,7 +82,7 @@ module.exports = {
     const e = type.lookupEnum(key)
     const v = e.valuesById[value]
     if (v === undefined) {
-      throw new Error(`Key '${key}' not found.`)
+      throw new Error(`Value '${value}' not found in key '${key}' not found.`)
     }
     return v
   },
