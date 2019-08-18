@@ -63,6 +63,7 @@ message Media {
     KITSU = 4;
     ANIDB = 5;
     TVDB = 6;
+    TMDB = 7;
   }
   MetadataType metadata = 8;
   // metadataId is the id used to tie this to a metadata provider
