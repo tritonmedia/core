@@ -17,6 +17,9 @@ const logger = require('pino')({
 })
 
 const initStatement = `
+-- For fuzzy search
+CREATE EXTENSION fuzzystrmatch;
+
 CREATE TABLE media (
   id character varying(36) PRIMARY KEY,
   media_name text NOT NULL,
@@ -324,6 +327,7 @@ class Storage {
         media_id: row.media_id,
         absolute_number: row.absolute_number,
         description: row.description,
+        title: row.title,
         season: row.season,
         season_number: row.season_number,
         air_date: row.air_date,
@@ -358,6 +362,44 @@ class Storage {
       runtime: row.runtime,
       created_at: row.created_at
     }
+  }
+
+  /**
+   * List Series
+   * @todo paginate
+   * @param {Number} type of the media,
+   * @returns {Array} media
+   */
+  async listSeries (type) {
+    const args = []
+
+    // TODO(jaredallard): this is just sad
+    let query = 'SELECT * FROM series_v1'
+    if (type) {
+      args.push(type)
+      query += ' WHERE type = $1'
+    }
+
+    const res = await this.adapter.query(query, args)
+    if (res.rows.length === 0) return []
+
+    return res.rows.map(row => {
+      return {
+        id: row.id,
+        title: row.title,
+        type: row.type,
+        rating: row.rating,
+        overview: row.overview,
+        network: row.network,
+        first_aired: row.first_aired,
+        status: row.status,
+        genres: row.genres,
+        airs: row.airs,
+        air_day_of_week: row.air_day_of_week,
+        runtime: row.runtime,
+        created_at: row.created_at
+      }
+    })
   }
 
   /**
@@ -399,6 +441,40 @@ class Storage {
         episode_id: row.episode_id,
         key: row.key,
         quality: row.quality,
+        created_at: row.created_at
+      }
+    })
+  }
+
+  /**
+   * Fuzzy search for a series by name
+   *
+   * @param {String} name name of the media, fuzzy
+   */
+  async searchSeries (name) {
+    const res = await this.adapter.query(`
+      SELECT * 
+      FROM series_v1
+      WHERE levenshtein(title, $1) <= 3
+      ORDER BY levenshtein(title, $1)
+      LIMIT 10
+    `, [name])
+    if (res.rows.length === 0) return []
+
+    return res.rows.map(row => {
+      return {
+        id: row.id,
+        title: row.title,
+        type: row.type,
+        rating: row.rating,
+        overview: row.overview,
+        network: row.network,
+        first_aired: row.first_aired,
+        status: row.status,
+        genres: row.genres,
+        airs: row.airs,
+        air_day_of_week: row.air_day_of_week,
+        runtime: row.runtime,
         created_at: row.created_at
       }
     })
