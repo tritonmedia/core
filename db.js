@@ -307,6 +307,103 @@ class Storage {
       }
     })
   }
+
+  /**
+   * List media
+   * @todo paginate
+   * @param {String} id of the media
+   * @returns {Array} media
+   */
+  async listEpisodes (id) {
+    const res = await this.adapter.query('SELECT * FROM episodes_v1 WHERE media_id = $1', [id])
+    if (res.rows.length === 0) return []
+
+    return res.rows.map(row => {
+      return {
+        id: row.id,
+        media_id: row.media_id,
+        absolute_number: row.absolute_number,
+        description: row.description,
+        season: row.season,
+        season_number: row.season_number,
+        air_date: row.air_date,
+        created_at: row.created_at
+      }
+    })
+  }
+
+  /**
+   * Get Series by ID
+   * @todo paginate
+   * @param {String} id of the media
+   * @returns {Array} media
+   */
+  async getSeries (id) {
+    const res = await this.adapter.query('SELECT * FROM series_v1 WHERE id = $1', [id])
+    if (res.rows.length === 0) return []
+
+    const row = res.rows[0]
+    return {
+      id: row.id,
+      title: row.title,
+      type: row.type,
+      rating: row.rating,
+      overview: row.overview,
+      network: row.network,
+      first_aired: row.first_aired,
+      status: row.status,
+      genres: row.genres,
+      airs: row.airs,
+      air_day_of_week: row.air_day_of_week,
+      runtime: row.runtime,
+      created_at: row.created_at
+    }
+  }
+
+  /**
+   * Get Series by ID
+   * @todo paginate
+   * @param {String} id of the media
+   * @returns {Array} media
+   */
+  async getSeriesImages (id) {
+    const res = await this.adapter.query('SELECT * FROM images_v1 WHERE media_id = $1', [id])
+    if (res.rows.length === 0) return []
+
+    return res.rows.map(row => {
+      return {
+        id: row.id,
+        media_id: row.media_id,
+        checksum: row.checksum,
+        image_type: row.image_type,
+        resolution: row.resolution,
+        rating: row.rating,
+        created_at: row.created_at
+      }
+    })
+  }
+
+  /**
+   * Get Episode Files
+   * @todo paginate
+   * @param {String} id of the episode
+   * @returns {Array} media
+   */
+  async getEpisodeFiles (id) {
+    const res = await this.adapter.query('SELECT * FROM episode_files_v1 WHERE episode_id = $1', [id])
+    if (res.rows.length === 0) return []
+
+    return res.rows.map(row => {
+      return {
+        id: row.id,
+        episode_id: row.episode_id,
+        key: row.key,
+        quality: row.quality,
+        created_at: row.created_at
+      }
+    })
+  }
+
   /**
    * Update the status of a media
    *
