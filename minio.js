@@ -102,5 +102,16 @@ module.exports = {
         return resolve()
       })
     })
+  },
+
+  /**
+   * Create a presigned URL for an image
+   * 
+   * @param {Minio.Client} s3Client s3 client
+   * @param {String} bucketID id of the bucket
+   * @param {String} key object key
+   */
+  presignedURL: async (s3Client, bucketID, key) => {
+    return s3Client.presignedGetObject(bucketID, key, 60 * 60 * 24)
   }
 }

@@ -345,8 +345,9 @@ class Storage {
   async getSeries (id) {
     const res = await this.adapter.query('SELECT * FROM series_v1 WHERE id = $1', [id])
     if (res.rows.length === 0) return []
-
+    
     const row = res.rows[0]
+    const images = await this.getSeriesImages(row.id)
     return {
       id: row.id,
       title: row.title,
@@ -356,6 +357,7 @@ class Storage {
       network: row.network,
       first_aired: row.first_aired,
       status: row.status,
+      images,
       genres: row.genres,
       airs: row.airs,
       air_day_of_week: row.air_day_of_week,
@@ -383,7 +385,9 @@ class Storage {
     const res = await this.adapter.query(query, args)
     if (res.rows.length === 0) return []
 
-    return res.rows.map(row => {
+
+    const promises = res.rows.map(async row => {
+      const images = await this.getSeriesImages(row.id)
       return {
         id: row.id,
         title: row.title,
@@ -393,6 +397,7 @@ class Storage {
         network: row.network,
         first_aired: row.first_aired,
         status: row.status,
+        images,
         genres: row.genres,
         airs: row.airs,
         air_day_of_week: row.air_day_of_week,
@@ -400,6 +405,8 @@ class Storage {
         created_at: row.created_at
       }
     })
+
+    return Promise.all(promises)
   }
 
   /**
