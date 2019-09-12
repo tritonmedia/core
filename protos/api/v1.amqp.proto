@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package api;
+
+message Delivery {
+  string createdAt = 1;
+  int32 retry = 2;
+  google.protobuf.Any message = 3; 
+}
