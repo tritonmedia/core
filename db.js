@@ -318,7 +318,10 @@ class Storage {
    * @returns {Array} media
    */
   async listEpisodes (id) {
-    const res = await this.adapter.query('SELECT * FROM episodes_v1 WHERE media_id = $1', [id])
+    const res = await this.adapter.query(`
+    SELECT e.id, e.description, e.title, e.media_id, e.air_date, e.season, e.season_number, e.created_at, i.id AS thumbnail_image_id FROM episodes_v1 e 
+    LEFT JOIN episode_images_v1 i ON e.id = i.episode_id WHERE media_id = $1;
+    `, [id])
     if (res.rows.length === 0) return []
 
     return res.rows.map(row => {
@@ -331,7 +334,8 @@ class Storage {
         season: row.season,
         season_number: row.season_number,
         air_date: row.air_date,
-        created_at: row.created_at
+        created_at: row.created_at,
+        thumbnail_image_id: row.thumbnail_image_id
       }
     })
   }
@@ -344,7 +348,7 @@ class Storage {
    */
   async getSeries (id) {
     const res = await this.adapter.query('SELECT * FROM series_v1 WHERE id = $1', [id])
-    if (res.rows.length === 0) return []
+    if (res.rows.length === 0) return {}
     
     const row = res.rows[0]
     const images = await this.getSeriesImages(row.id)
@@ -451,6 +455,47 @@ class Storage {
         created_at: row.created_at
       }
     })
+  }
+
+  /**
+   * Get Subtitles Files
+   * @todo paginate
+   * @param {String} id of the episode
+   * @returns {Array} subtitles
+   */
+  async getSubtitles (id) {
+    const res = await this.adapter.query('SELECT * FROM subtitles_v1 WHERE episode_id = $1', [id])
+    if (res.rows.length === 0) return []
+
+    return res.rows.map(row => {
+      return {
+        id: row.id,
+        episode_id: row.episode_id,
+        key: row.key,
+        language: row.language,
+        created_at: row.created_at
+      }
+    })
+  }
+
+  /**
+   * Get a subtitle by episode ID 
+   * @todo paginate
+   * @param {String} episodeID of the episode
+   * @returns {Object} subtitle
+   */
+  async getSubtitle (episodeID, subtitleID) {
+    const res = await this.adapter.query('SELECT * FROM subtitles_v1 WHERE episode_id = $1 AND id = $2', [episodeID, subtitleID])
+    if (res.rows.length === 0) return {}
+
+    const row = res.rows[0]
+    return {
+      id: row.id,
+      episode_id: row.episode_id,
+      key: row.key,
+      language: row.language,
+      created_at: row.created_at
+    }
   }
 
   /**
