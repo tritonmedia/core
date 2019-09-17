@@ -21,7 +21,7 @@ module.exports = prop => {
     break;
 
     case 'minio':
-      response = process.env.MINIO || 'http://127.0.0.1:9000'
+      response = process.env.S3_ENDPOINT || 'http://127.0.0.1:9000'
     break;
 
     case 'rabbitmq':
