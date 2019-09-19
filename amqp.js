@@ -86,12 +86,16 @@ class AMQP {
 
   async connect () {
     return new Promise(async (resolve, reject) => {
-      this.connection = await amqp.connect({
+      const opts = {
         protocol: 'amqp',
         hostname: this.host,
         username: process.env.RABBITMQ_USERNAME,
         password: process.env.RABBITMQ_PASSWORD,
-      })
+      }
+
+      const url = `${opts.protocol}://${opts.username}:${opts.password}@${opts.hostname}`
+      logger.info('connecting to rabbitmq', url)
+      this.connection = await amqp.connect(url)
       this.connection.on('disconnect', err => {
         metrics.up.set(0)
         logger.warn('disconnected to rabbitmq', err)
