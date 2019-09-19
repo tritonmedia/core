@@ -62,6 +62,7 @@ class Storage {
     this.adapter = new Pool({
       host: dyn('postgres'),
       user: 'postgres',
+      password: process.env.POSTGRES_PASSWORD,
       database: 'media'
     })
   }
